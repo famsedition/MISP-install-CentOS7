@@ -1,4 +1,4 @@
-# MISP-install-CenOS7
+# MISP-install-CentOS7
 scripts for automating the installation process of MISP in CentOS 7
 
 ### Usage
