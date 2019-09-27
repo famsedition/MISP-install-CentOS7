@@ -252,7 +252,6 @@ permissions_RHEL () {
   chmod -R g+xws $PATH_TO_MISP/app/tmp
   chmod -R g+ws $PATH_TO_MISP/app/files
   chmod -R g+ws $PATH_TO_MISP/app/files/scripts/tmp
-  chmod -R g+rw $PATH_TO_MISP/venv
   chmod -R g+rw $PATH_TO_MISP/.git
   chown $WWW_USER:$WWW_USER $PATH_TO_MISP/app/files
   chown $WWW_USER:$WWW_USER $PATH_TO_MISP/app/files/terms
@@ -595,7 +594,7 @@ coreCAKE () {
   $SUDO_WWW $RUN_PHP -- $CAKE Admin updateDatabase
 
   # The default install is Python >=3.6 in a virtualenv, setting accordingly
-  $SUDO_WWW $RUN_PHP -- $CAKE Admin setSetting "MISP.python_bin" "${PATH_TO_MISP}/venv/bin/python"
+  $SUDO_WWW $RUN_PHP -- $CAKE Admin setSetting "MISP.python_bin" "python"
 
   # Set default role
   # TESTME: The following seem defunct, please test.
@@ -814,7 +813,7 @@ mispDashboard () {
 }
 mispDashboard
 
-sudo -u apache $RUN_PHP "$CAKE Admin setSetting "MISP.python_bin" "${PATH_TO_MISP}/venv/bin/python""
+sudo -u apache $RUN_PHP "$CAKE Admin setSetting "MISP.python_bin" "python""
 
 echo "Installation completed"
 echo "Now log in using the webinterface: https://misp/users/login"
