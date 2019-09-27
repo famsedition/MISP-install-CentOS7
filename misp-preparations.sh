@@ -4,10 +4,10 @@
 #                    MISP CENTOS7 INSTALL SCRIPT                      #
 #                                                                     #
 # Revised from:                                                       #
-# https://misp.github.io/MISP/INSTALL.rhel7/  						  #
+# https://misp.github.io/MISP/INSTALL.rhel7/  						            #
 #                                                                     #
 # > Must be run as root                                               #
-# > run this file first 										  	  #
+# > run this file first 										  	                      #
 #######################################################################
 
 hostnamectl set-hostname misp.local
