@@ -14,5 +14,6 @@ yum update -y
 yum install epel-release -y	
 yum install centos-release-scl -y
 yum install deltarpm -y
+yum groupinstall "Development tools" -y
 useradd -rU misp
 reboot 		
