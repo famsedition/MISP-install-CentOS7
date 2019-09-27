@@ -10,7 +10,6 @@
 # > run this file first                                               #
 #######################################################################
 
-hostnamectl set-hostname misp.local
 yum update -y
 yum install epel-release -y	
 yum install centos-release-scl -y
