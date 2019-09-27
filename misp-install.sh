@@ -33,10 +33,12 @@ MISPvars () {
   DBHOST='localhost'
   DBNAME='misp'
   DBUSER_ADMIN='root'
-  read -sp "Enter password for root db admin: "  DBPASSWORD_ADMIN
+  echo "Enter password for root db admin: "
+  read -s DBPASSWORD_ADMIN
   DBUSER_MISP='misp'
-  read -sp "Enter password for misp db user: "  DBPASSWORD_MISP
-
+  echo "Enter password for misp db user: "
+  read -s DBPASSWORD_MISP
+  
   # OpenSSL configuration
   OPENSSL_CN=$FQDN
   read -p "openssl - Enter Country Name (2 letter code) [SN]: "  OPENSSL_C
