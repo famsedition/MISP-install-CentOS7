@@ -165,38 +165,9 @@ installCoreRHEL () {
   # install redis
   $SUDO_WWW $PATH_TO_MISP/venv/bin/pip install -U redis
 
-  # lief needs manual compilation
-  #yum install devtoolset-7 cmake3 cppcheck -y
-
-  # FIXME: This does not work!
-  #cd $PATH_TO_MISP/app/files/scripts/lief
-  #$SUDO_WWW mkdir build
-  #cd build
-  #$SUDO_WWW scl enable devtoolset-7 rh-python36 "bash -c 'cmake3 \
-  #-DLIEF_PYTHON_API=on \
-  #-DPYTHON_VERSION=3.6 \
-  #-DPYTHON_EXECUTABLE=$PATH_TO_MISP/venv/bin/python \
-  #-DLIEF_DOC=off \
-  #-DCMAKE_BUILD_TYPE=Release \
-  #..'"
-  #$SUDO_WWW make -j3 pyLIEF
-
-  #if [ $? == 2 ]; then
-    # In case you get "internal compiler error: Killed (program cc1plus)"
-    # You ran out of memory.
-    # Create some swap
-    #dd if=/dev/zero of=/var/swap.img bs=1024k count=4000
-    #mkswap /var/swap.img
-    #swapon /var/swap.img
-    # And compile again
-    #$SUDO_WWW make -j3 pyLIEF
-    #swapoff /var/swap.img
-    #rm /var/swap.img
-  #fi
-
-  # The following adds a PYTHONPATH to where the pyLIEF module has been compiled
-  #echo /var/www/MISP/app/files/scripts/lief/build/api/python |$SUDO_WWW tee /var/www/MISP/venv/lib/python3.6/site-packages/lief.pth
-
+  # install lief
+  $SUDO_WWW $PATH_TO_MISP/venv/bin/pip install -U lief
+  
   # install magic, pydeep
   $SUDO_WWW $PATH_TO_MISP/venv/bin/pip install -U python-magic git+https://github.com/kbandla/pydeep.git plyara
 
@@ -847,3 +818,8 @@ mispDashboard () {
 mispDashboard
 
 sudo -u apache $RUN_PHP "$CAKE Admin setSetting "MISP.python_bin" "${PATH_TO_MISP}/venv/bin/python""
+
+echo "Installation completed"
+echo "Now log in using the webinterface: https://misp/users/login"
+echo "The default user/pass = admin@admin.test/admin"
+echo "Set MISP up to your preference in Administration -> Server Settings"
