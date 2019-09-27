@@ -131,11 +131,9 @@ installCoreRHEL () {
   $RUN_PHP -- pear install ${PATH_TO_MISP}/INSTALL/dependencies/Console_CommandLine/package.xml
   $RUN_PHP -- pear install ${PATH_TO_MISP}/INSTALL/dependencies/Crypt_GPG/package.xml
 
-  # Create a python3 virtualenv
-  $SUDO_WWW $RUN_PYTHON -- virtualenv -p python3 $PATH_TO_MISP/venv
   mkdir /usr/share/httpd/.cache
   chown $WWW_USER:$WWW_USER /usr/share/httpd/.cache
-  $SUDO_WWW $PATH_TO_MISP/venv/bin/pip install -U pip setuptools
+  $SUDO_WWW $RUN_PYTHON "pip install setuptools"
 
   cd $PATH_TO_MISP/app/files/scripts
   $SUDO_WWW git clone https://github.com/CybOXProject/python-cybox.git
@@ -148,34 +146,34 @@ installCoreRHEL () {
   UMASK=$(umask)
   umask 0022
   cd $PATH_TO_MISP/app/files/scripts/python-stix
-  $SUDO_WWW $PATH_TO_MISP/venv/bin/pip install .
+  $SUDO_WWW $RUN_PYTHON "pip install ."
 
   # install mixbox to accommodate the new STIX dependencies:
   cd $PATH_TO_MISP/app/files/scripts/mixbox
-  $SUDO_WWW $PATH_TO_MISP/venv/bin/pip install .
+  $SUDO_WWW $RUN_PYTHON "pip install ."
 
   # install STIX2.0 library to support STIX 2.0 export:
   cd $PATH_TO_MISP/cti-python-stix2
-  $SUDO_WWW $PATH_TO_MISP/venv/bin/pip install .
+  $SUDO_WWW $RUN_PYTHON "pip install ."
 
   # install maec
-  $SUDO_WWW $PATH_TO_MISP/venv/bin/pip install -U maec
+  $SUDO_WWW $RUN_PYTHON "pip install maec"
 
   # install zmq
-  $SUDO_WWW $PATH_TO_MISP/venv/bin/pip install -U zmq
+  $SUDO_WWW $RUN_PYTHON "pip install zmq"
 
   # install redis
-  $SUDO_WWW $PATH_TO_MISP/venv/bin/pip install -U redis
+  $SUDO_WWW $RUN_PYTHON "pip install redis"
 
   # install lief
-  $SUDO_WWW $PATH_TO_MISP/venv/bin/pip install -U lief
+  $SUDO_WWW $RUN_PYTHON "pip install lief"
   
   # install magic, pydeep
-  $SUDO_WWW $PATH_TO_MISP/venv/bin/pip install -U python-magic git+https://github.com/kbandla/pydeep.git plyara
+  $SUDO_WWW $RUN_PYTHON "pip install python-magic git+https://github.com/kbandla/pydeep.git plyara"
 
   # install PyMISP
   cd $PATH_TO_MISP/PyMISP
-  $SUDO_WWW $PATH_TO_MISP/venv/bin/pip install -U .
+  $SUDO_WWW $RUN_PYTHON "pip install ."
 
   # Enable python3 for php-fpm
   echo 'source scl_source enable rh-python36' | tee -a /etc/opt/rh/rh-php72/sysconfig/php-fpm
