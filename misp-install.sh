@@ -19,7 +19,8 @@ MISPvars () {
   # RHEL/CentOS
   WWW_USER='apache'
   
-  read -p " set new fqdn hostname [misp.local]: " FQDN
+  echo "set new fqdn hostname [misp.local]: "
+  read -s FQDN
   hostnamectl set-hostname $FQDN
 
   if [ -z "$MISP_BASEURL" ]; then
