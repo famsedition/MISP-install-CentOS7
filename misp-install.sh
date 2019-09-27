@@ -312,7 +312,6 @@ EOF
 }
 prepareDB_RHEL
 
-
 apacheConfig_RHEL () {
   # Now configure your apache server with the DocumentRoot $PATH_TO_MISP/app/webroot/
   # A sample vhost can be found in $PATH_TO_MISP/INSTALL/apache.misp.centos7
@@ -350,7 +349,6 @@ apacheConfig_RHEL () {
   chcon -t httpd_sys_script_exec_t $PATH_TO_MISP/app/files/scripts/mispzmq/mispzmqtest.py
   #chcon -t httpd_sys_script_exec_t $PATH_TO_MISP/app/files/scripts/lief/build/api/python/lief.so
   chcon -t httpd_sys_rw_content_t /tmp
-  chcon -R -t usr_t $PATH_TO_MISP/venv
   chcon -R -t httpd_sys_rw_content_t $PATH_TO_MISP/.git
   chcon -R -t httpd_sys_rw_content_t $PATH_TO_MISP/app/tmp
   chcon -R -t httpd_sys_rw_content_t $PATH_TO_MISP/app/Lib
@@ -520,8 +518,8 @@ mispmodulesRHEL () {
   $SUDO_WWW git clone https://github.com/MISP/misp-modules.git
   cd misp-modules
   # pip install
-  $SUDO_WWW $PATH_TO_MISP/venv/bin/pip install -U -I -r REQUIREMENTS
-  $SUDO_WWW $PATH_TO_MISP/venv/bin/pip install -U .
+  $SUDO_WWW $RUN_PYTHON "pip install -I -r REQUIREMENTS"
+  $SUDO_WWW $RUN_PYTHON "pip install ."
   yum install rubygem-rouge rubygem-asciidoctor zbar-devel opencv-devel -y
 
   echo "[Unit]
@@ -533,8 +531,7 @@ mispmodulesRHEL () {
   User=apache
   Group=apache
   WorkingDirectory=/usr/local/src/misp-modules
-  Environment="PATH=/var/www/MISP/venv/bin"
-  ExecStart=\"${PATH_TO_MISP}/venv/bin/misp-modules -l 127.0.0.1 -s\"
+  ExecStart=\"misp-modules -l 127.0.0.1 -s\"
   Restart=always
   RestartSec=10
 
@@ -543,7 +540,7 @@ mispmodulesRHEL () {
 
   systemctl daemon-reload
   # Test misp-modules
-  $SUDO_WWW $PATH_TO_MISP/venv/bin/misp-modules -l 127.0.0.1 -s &
+  $SUDO_WWW misp-modules -l 127.0.0.1 -s &
   systemctl enable --now misp-modules
 
   # Enable Enrichment, set better timeouts
