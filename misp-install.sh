@@ -773,8 +773,9 @@ mispDashboard () {
   $SUDO_WWW git clone https://github.com/MISP/misp-dashboard.git /var/www/misp-dashboard
   cd /var/www/misp-dashboard
   sed -i -E 's/apt/#apt/' install_dependencies.sh
+  sed -i -E 's/rhel/centos/' install_dependencies.sh
   sed -i -E 's/virtualenv -p python3 DASHENV/\/usr\/bin\/scl enable rh-python36 \"virtualenv -p python3 DASHENV\"/' install_dependencies.sh
-  -H /var/www/misp-dashboard/install_dependencies.sh
+  /var/www/misp-dashboard/install_dependencies.sh
   sed -i "s/^host\ =\ localhost/host\ =\ 0.0.0.0/g" /var/www/misp-dashboard/config/config.cfg
   sed -i '/Listen 80/a Listen 0.0.0.0:8001' /etc/httpd/conf/httpd.conf
   yum install rh-python36-mod_wsgi -y
