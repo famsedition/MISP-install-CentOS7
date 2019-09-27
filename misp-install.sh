@@ -620,8 +620,6 @@ mispmodulesRHEL
 
 
 coreCAKE () {
-  debug "Running core Cake commands to set sane defaults for ${LBLUE}MISP${NC}"
-
   # IF you have logged in prior to running this, it will fail but the fail is NON-blocking
   $SUDO_WWW $RUN_PHP -- $CAKE userInit -q
 
