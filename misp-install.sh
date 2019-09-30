@@ -167,7 +167,7 @@ installCoreRHEL () {
   $SUDO_WWW $PATH_TO_MISP/venv/bin/pip install -U redis
 
   # install lief
-  $SUDO_WWW $PATH_TO_MISP/venv/bin/pip install -U lief
+  $SUDO_WWW $PATH_TO_MISP/venv/bin/pip install -U https://github.com/lief-project/packages/raw/lief-master-latest/pylief-0.9.0.dev.zip
   
   # install magic, pydeep
   $SUDO_WWW $PATH_TO_MISP/venv/bin/pip install -U python-magic git+https://github.com/kbandla/pydeep.git plyara
