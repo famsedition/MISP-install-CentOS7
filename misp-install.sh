@@ -321,7 +321,7 @@ apacheConfig_RHEL () {
 
   cp $PATH_TO_MISP/INSTALL/apache.misp.centos7.ssl /etc/httpd/conf.d/misp.ssl.conf
   #sed -i "s/SetHandler/\#SetHandler/g" /etc/httpd/conf.d/misp.ssl.conf
-  rm /etc/httpd/conf.d/ssl.conf
+  rm -f /etc/httpd/conf.d/ssl.conf
   chmod 644 /etc/httpd/conf.d/misp.ssl.conf
   sed -i '/Listen 80/a Listen 443' /etc/httpd/conf/httpd.conf
 
@@ -333,7 +333,7 @@ apacheConfig_RHEL () {
   fi
   openssl genrsa -des3 -passout pass:xxxx -out /tmp/misp.local.key 4096
   openssl rsa -passin pass:xxxx -in /tmp/misp.local.key -out /etc/pki/tls/private/misp.local.key
-  rm /tmp/misp.local.key
+  rm -f /tmp/misp.local.key
   openssl req -new -subj "/C=${OPENSSL_C}/ST=${OPENSSL_ST}/L=${OPENSSL_L}/O=${OPENSSL_O}/OU=${OPENSSL_OU}/CN=${OPENSSL_CN}/emailAddress=${OPENSSL_EMAILADDRESS}" -key /etc/pki/tls/private/misp.local.key -out /etc/pki/tls/certs/misp.local.csr
   openssl x509 -req -days 365 -in /etc/pki/tls/certs/misp.local.csr -signkey /etc/pki/tls/private/misp.local.key -out /etc/pki/tls/certs/misp.local.crt
   ln -s /etc/pki/tls/certs/misp.local.csr /etc/pki/tls/certs/misp-chain.crt
@@ -720,7 +720,7 @@ updateGOWNT () {
   # 
   $SUDO_WWW $RUN_MYSQL -- mysql -u $DBUSER_MISP -p$DBPASSWORD_MISP misp -e "SELECT authkey FROM users;" | tail -1 > /tmp/auth.key
   AUTH_KEY=$(cat /tmp/auth.key)
-  rm /tmp/auth.key
+  rm -f /tmp/auth.key
 
   debug "Updating Galaxies, ObjectTemplates, Warninglists, Noticelists and Templates"
   # Update the galaxies…
