@@ -140,6 +140,7 @@ installCoreRHEL () {
   cd $PATH_TO_MISP/app/files/scripts
   $SUDO_WWW git clone https://github.com/CybOXProject/python-cybox.git
   $SUDO_WWW git clone https://github.com/STIXProject/python-stix.git
+  $SUDO_WWW git clone --branch master --single-branch https://github.com/lief-project/LIEF.git lief
   $SUDO_WWW git clone https://github.com/CybOXProject/mixbox.git
 
   cd $PATH_TO_MISP/app/files/scripts/python-cybox
@@ -166,8 +167,37 @@ installCoreRHEL () {
   # install redis
   $SUDO_WWW $PATH_TO_MISP/venv/bin/pip install -U redis
 
-  # install lief
-  $SUDO_WWW $PATH_TO_MISP/venv/bin/pip install -U https://github.com/lief-project/packages/raw/lief-master-latest/pylief-0.9.0.dev.zip
+  # lief needs manual compilation
+  sudo yum install devtoolset-7 cmake3 cppcheck -y
+  
+  # FIXME: This does not work!
+  cd $PATH_TO_MISP/app/files/scripts/lief
+  $SUDO_WWW mkdir build
+  cd build
+  $SUDO_WWW scl enable devtoolset-7 rh-python36 "bash -c 'cmake3 \
+  -DLIEF_PYTHON_API=on \
+  -DPYTHON_VERSION=3.6 \
+  -DPYTHON_EXECUTABLE=$PATH_TO_MISP/venv/bin/python \
+  -DLIEF_DOC=off \
+  -DCMAKE_BUILD_TYPE=Release \
+  ..'"
+  $SUDO_WWW make -j3 pyLIEF
+
+  if [ $? == 2 ]; then
+    # In case you get "internal compiler error: Killed (program cc1plus)"
+    # You ran out of memory.
+    # Create some swap
+    sudo dd if=/dev/zero of=/var/swap.img bs=1024k count=4000
+    sudo mkswap /var/swap.img
+    sudo swapon /var/swap.img
+    # And compile again
+    $SUDO_WWW make -j3 pyLIEF
+    sudo swapoff /var/swap.img
+    sudo rm /var/swap.img
+  fi
+
+  # The following adds a PYTHONPATH to where the pyLIEF module has been compiled
+  echo /var/www/MISP/app/files/scripts/lief/build/api/python |$SUDO_WWW tee /var/www/MISP/venv/lib/python3.6/site-packages/lief.pth
   
   # install magic, pydeep
   $SUDO_WWW $PATH_TO_MISP/venv/bin/pip install -U python-magic git+https://github.com/kbandla/pydeep.git plyara
@@ -349,7 +379,7 @@ apacheConfig_RHEL () {
   chcon -t httpd_sys_script_exec_t $PATH_TO_MISP/app/Console/worker/start.sh
   chcon -t httpd_sys_script_exec_t $PATH_TO_MISP/app/files/scripts/mispzmq/mispzmq.py
   chcon -t httpd_sys_script_exec_t $PATH_TO_MISP/app/files/scripts/mispzmq/mispzmqtest.py
-  #chcon -t httpd_sys_script_exec_t $PATH_TO_MISP/app/files/scripts/lief/build/api/python/lief.so
+  chcon -t httpd_sys_script_exec_t $PATH_TO_MISP/app/files/scripts/lief/build/api/python/lief.so
   chcon -t httpd_sys_rw_content_t /tmp
   chcon -R -t usr_t $PATH_TO_MISP/venv
   chcon -R -t httpd_sys_rw_content_t $PATH_TO_MISP/.git
