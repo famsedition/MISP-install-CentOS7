@@ -223,7 +223,7 @@ installCake_RHEL ()
   systemctl restart rh-php72-php-fpm.service
 
   # If you have not yet set a timezone in php.ini
-  echo 'date.timezone = "Asia/Tokyo"' |tee /etc/opt/rh/rh-php72/php-fpm.d/timezone.ini
+  echo 'date.timezone = "Africa/Dakar"' |tee /etc/opt/rh/rh-php72/php-fpm.d/timezone.ini
   ln -s ../php-fpm.d/timezone.ini /etc/opt/rh/rh-php72/php.d/99-timezone.ini
 
   # Recommended: Change some PHP settings in /etc/opt/rh/rh-php72/php.ini
