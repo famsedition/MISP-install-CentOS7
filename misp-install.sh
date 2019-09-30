@@ -319,7 +319,7 @@ apacheConfig_RHEL () {
   # Now configure your apache server with the DocumentRoot $PATH_TO_MISP/app/webroot/
   # A sample vhost can be found in $PATH_TO_MISP/INSTALL/apache.misp.centos7
 
-  cp $PATH_TO_MISP/INSTALL/apache.misp.centos7.ssl /etc/httpd/conf.d/misp.ssl.conf
+  cp -f $PATH_TO_MISP/INSTALL/apache.misp.centos7.ssl /etc/httpd/conf.d/misp.ssl.conf
   #sed -i "s/SetHandler/\#SetHandler/g" /etc/httpd/conf.d/misp.ssl.conf
   rm -f /etc/httpd/conf.d/ssl.conf
   chmod 644 /etc/httpd/conf.d/misp.ssl.conf
@@ -386,7 +386,7 @@ logRotation_RHEL () {
   # MISP saves the stdout and stderr of its workers in $PATH_TO_MISP/app/tmp/logs
   # To rotate these logs install the supplied logrotate script:
 
-  cp $PATH_TO_MISP/INSTALL/misp.logrotate /etc/logrotate.d/misp
+  cp -f $PATH_TO_MISP/INSTALL/misp.logrotate /etc/logrotate.d/misp
   chmod 0640 /etc/logrotate.d/misp
 
   # Now make logrotate work under SELinux as well
@@ -407,10 +407,10 @@ logRotation_RHEL
 
 configMISP_RHEL () {
   # There are 4 sample configuration files in $PATH_TO_MISP/app/Config that need to be copied
-  $SUDO_WWW cp -a $PATH_TO_MISP/app/Config/bootstrap.default.php $PATH_TO_MISP/app/Config/bootstrap.php
-  $SUDO_WWW cp -a $PATH_TO_MISP/app/Config/database.default.php $PATH_TO_MISP/app/Config/database.php
-  $SUDO_WWW cp -a $PATH_TO_MISP/app/Config/core.default.php $PATH_TO_MISP/app/Config/core.php
-  $SUDO_WWW cp -a $PATH_TO_MISP/app/Config/config.default.php $PATH_TO_MISP/app/Config/config.php
+  $SUDO_WWW cp -fa $PATH_TO_MISP/app/Config/bootstrap.default.php $PATH_TO_MISP/app/Config/bootstrap.php
+  $SUDO_WWW cp -fa $PATH_TO_MISP/app/Config/database.default.php $PATH_TO_MISP/app/Config/database.php
+  $SUDO_WWW cp -fa $PATH_TO_MISP/app/Config/core.default.php $PATH_TO_MISP/app/Config/core.php
+  $SUDO_WWW cp -fa $PATH_TO_MISP/app/Config/config.default.php $PATH_TO_MISP/app/Config/config.php
 
   echo "<?php
   class DATABASE_CONFIG {
@@ -752,8 +752,8 @@ mispDashboard () {
   sed -i "s/^host\ =\ localhost/host\ =\ 0.0.0.0/g" /var/www/misp-dashboard/config/config.cfg
   sed -i '/Listen 80/a Listen 0.0.0.0:8001' /etc/httpd/conf/httpd.conf
   yum install rh-python36-mod_wsgi -y
-  cp /opt/rh/httpd24/root/usr/lib64/httpd/modules/mod_rh-python36-wsgi.so /etc/httpd/modules/
-  cp /opt/rh/httpd24/root/etc/httpd/conf.modules.d/10-rh-python36-wsgi.conf /etc/httpd/conf.modules.d/
+  cp -f /opt/rh/httpd24/root/usr/lib64/httpd/modules/mod_rh-python36-wsgi.so /etc/httpd/modules/
+  cp -f /opt/rh/httpd24/root/etc/httpd/conf.modules.d/10-rh-python36-wsgi.conf /etc/httpd/conf.modules.d/
 
   echo "<VirtualHost *:8001>
       ServerAdmin admin@misp.local
