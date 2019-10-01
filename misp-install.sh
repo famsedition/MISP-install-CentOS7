@@ -78,7 +78,7 @@ yumInstallCoreDeps () {
                    mod_ssl \
                    rh-redis32 \
                    rh-mariadb102 \
-                   libxslt-devel zlib-devel ssdeep-devel -y
+                   python-zmq libxslt-devel zlib-devel ssdeep-devel -y
 
   # Enable and start redis
   systemctl enable --now rh-redis32-redis.service
